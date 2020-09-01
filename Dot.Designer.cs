@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Drawing;
 
@@ -29,6 +30,15 @@ namespace Temp
             this.TransparencyKey = System.Drawing.Color.FromArgb(0, 255, 0);
             //this.DoubleBuffered = true;
             this.Text = "The Dot";
+
+            var initialStyle = GetWindowLong(this.Handle, -20);
+            SetWindowLong(this.Handle, -20, initialStyle | 0x80000 | 0x20);
         }
+
+        [DllImport("user32.dll")]
+        static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern int GetWindowLong(IntPtr hWnd, int nIndex);
     }
 }
